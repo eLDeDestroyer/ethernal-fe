@@ -1,207 +1,276 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 pb-32 overflow-y-auto">
-    <LoadingOverlay :isLoading="isFetching || isLoading" />
+  <div class="min-h-screen bg-gray-100">
 
-    <!-- ===== HEADER FIXED ===== -->
-    <div
-      class="fixed top-0 left-0 right-0 z-30 bg-white shadow-md border-b border-gray-200 px-4 py-3 flex items-center justify-between"
-    >
-      <h2 class="text-lg lg:text-[1.7rem] font-bold text-gray-800">
-        Latihan Soal
-      </h2>
-
-      <div class="text-sm lg:text-[1.5rem] font-semibold text-blue-600">
-        {{ formattedTime }}
-      </div>
+    <!-- HEADER -->
+    <div class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-6 py-4 flex justify-between items-center">
+      <h2 class="font-bold text-lg">Latihan Soal</h2>
+      <span class="font-semibold text-red-600 text-lg">
+        ⏱ {{ formattedTime }}
+      </span>
     </div>
 
-    <!-- SPACE HEADER -->
     <div class="h-20"></div>
 
-    <!-- ===== LIST SOAL ===== -->
-    <div class="px-4 space-y-6 lg:p-10">
+    <!-- MAIN CONTENT -->
+    <div class="flex flex-col lg:flex-row gap-4 px-4 lg:px-6">
+
+      <!-- PDF -->
       <div
-        v-for="(q, idx) in res"
-        :key="idx"
-        class="bg-white p-5 rounded-2xl shadow-lg border border-gray-100 lg:mx-[10rem]"
+        ref="pdfContainer"
+        class="flex-1 h-[80vh] overflow-y-auto bg-gray-300 rounded-xl"
       >
-        <!-- NOMOR -->
-        <p class="text-xs font-semibold text-blue-600 mb-1 lg:text-lg">
-          Soal {{ q.number }}
-        </p>
+        <div
+          v-for="pageNum in totalPages"
+          :key="pageNum"
+          :data-page="pageNum"
+          ref="pageWrappers"
+          class="min-h-[500px] flex justify-center items-center bg-gray-400/10 mb-2"
+        >
+          <canvas class="w-full block shadow-md" />
+        </div>
+      </div>
 
-        <!-- SOAL -->
-        <h3 class="text-md  text-gray-900 leading-snug lg:text-[1.3rem] mb-[2rem]" v-html="q.question">
-        </h3>
+      <!-- DESKTOP ANSWER PANEL -->
+      <div class="hidden lg:block w-[360px] bg-white rounded-xl shadow p-4 h-[80vh] overflow-y-auto">
+        <p class="font-bold text-lg text-center mb-4">Jawaban</p>
 
-        <!-- JAWABAN -->
-        <div class="mt-3 space-y-3">
+        <div class="space-y-4">
           <div
-            v-for="(ans, aidx) in q.answer"
-            :key="aidx"
-            @click="selectAnswer(q.number, aidx)"
-            class="p-4 rounded-xl border transition cursor-pointer flex items-start gap-3"
-            :class="selected[q.number] === aidx 
-              ? 'bg-blue-600 text-white border-blue-600' 
-              : 'bg-white text-gray-800 border-gray-200 active:scale-[0.98]'"
+            v-for="num in 20"
+            :key="num"
+            class="border rounded-xl p-3"
+            :class="currentQuestion === num ? 'border-blue-600' : 'border-gray-200'"
           >
-            <div class="w-9 h-9 flex items-center justify-center rounded-xl font-bold">
-              {{ ans.answer }}
+            <div class="flex justify-between mb-2">
+              <span class="font-bold">Soal {{ num }}</span>
+              <span v-if="answers[num]" class="text-green-600 font-bold">
+                {{ answers[num] }}
+              </span>
             </div>
 
-            <div class="leading-snug lg:text-[1.2rem]">
-              <p class="text-sm lg:text-[1.2rem]" v-html="ans.answer_text">
-              </p>
+            <div class="grid grid-cols-5 gap-2">
+              <button
+                v-for="opt in options"
+                :key="opt"
+                @click="selectAnswer(num, opt)"
+                class="py-2 rounded-lg font-bold border"
+                :class="answers[num] === opt
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white'"
+              >
+                {{ opt }}
+              </button>
             </div>
           </div>
         </div>
 
+        <button
+          @click="submitAnswers"
+          class="mt-6 w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-md"
+        >
+          KUMPULKAN
+        </button>
       </div>
+
     </div>
 
-    <!-- ====================== STICKY BOTTOM BUTTON ======================= -->
-<div
-  class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 p-4 lg:p-6"
->
-  <button
-    @click="submit"
-    :disabled="isLoading"
-    class="w-full lg:w-[400px] mx-auto bg-blue-600 text-white py-3 lg:py-4 rounded-2xl text-center text-sm lg:text-lg font-bold active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed"
-  >
-    {{ isLoading ? 'MENGUMPULKAN...' : 'KUMPULKAN' }}
-  </button>
-</div>
+    <!-- MOBILE BUTTON -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-30 lg:hidden">
+      <button
+        @click="openSheet"
+        class="w-full py-4 rounded-2xl bg-blue-600 text-white font-bold text-sm"
+      >
+        JAWAB & NAVIGASI
+      </button>
+    </div>
 
+    <!-- MOBILE BOTTOM SHEET -->
+    <transition name="fade">
+      <div
+        v-if="showSheet"
+        class="fixed inset-0 bg-black/40 z-40 flex items-end lg:hidden"
+        @click.self="showSheet = false"
+      >
+        <div class="bg-white w-full rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">
+
+          <p class="text-center font-bold text-lg mb-4">
+            Pilih Soal & Jawaban
+          </p>
+
+          <div class="space-y-4">
+            <div
+              v-for="num in 20"
+              :key="num"
+              class="border rounded-xl p-3"
+            >
+              <div class="flex justify-between mb-2">
+                <span class="font-bold">Soal {{ num }}</span>
+                <span v-if="answers[num]" class="text-green-600 font-bold">
+                  {{ answers[num] }}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-5 gap-2">
+                <button
+                  v-for="opt in options"
+                  :key="opt"
+                  @click="selectAnswer(num, opt)"
+                  class="py-2 rounded-lg font-bold border"
+                  :class="answers[num] === opt
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white'"
+                >
+                  {{ opt }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button
+            @click="submitAnswers"
+            class="mt-6 w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-sm"
+          >
+            KUMPULKAN
+          </button>
+
+        </div>
+      </div>
+    </transition>
 
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import questionService from "../services/question.service";
-import LoadingOverlay from "../components/LoadingOverlay.vue";
+import { ref, reactive, onMounted, onUnmounted, computed } from "vue";
+import * as pdfjsLib from "pdfjs-dist";
 
-const route = useRoute();
-const res = ref([]);
-// isLoading is already declared for submit, reuse it or ensure scope is correct.
-// Actually isLoading was defined inside script setup later. Let's merge declarations.
-// Wait, I see `const isLoading = ref(false);` in the previous SUBMIT BUTTON section (lines 131+).
-// I should move it up or use a separate loading state for fetch if I want to distinguishing.
-// But user requested loading for "fetch". Let's use `isFetching` or similar if `isLoading` is reserved for submit.
-// Or just reuse `isLoading`.
-// Let's check where `isLoading` is defined. It is defined near submit.
-// Ideally I should move `isLoading` to top level.
+/* ================= PDF ================= */
+const pdfUrl =
+  "https://fcvhrvhnlunssvyegxar.supabase.co/storage/v1/object/sign/ethernal/PBM/PBM3.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODVmYTFjNS1mYTE3LTQ4YjItYjg1Ni04ODMzZjQxN2UyNzAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJldGhlcm5hbC9QQk0vUEJNMy5wZGYiLCJpYXQiOjE3NjYxMTk1MzAsImV4cCI6MTc5NzY1NTUzMH0.nBHnF9jq6B3X1pBb45JPdrM2bAq_Pp0Vw3MaA1fz540";
 
-// I will re-declare it at the top and remove the later declaration if possible, OR just declare it at the top and let the later one be a duplicate (which is bad).
-// Better to check file content again.
-// I will just add `const isFetching = ref(false)` for data fetching to be safe and clear.
-const isFetching = ref(false);
+const totalPages = ref(0);
+let pdfDoc = null;
+const renderedPages = new Set();
+const pdfContainer = ref(null);
 
-const fetchQuestions = async () => {
-  const topicId = route.params.topic_id;
-  if (!topicId) return;
+/* ================= SOAL ================= */
+const currentQuestion = ref(1);
+const showSheet = ref(false);
+const options = ["A", "B", "C", "D", "E"];
+const answers = reactive({});
 
-  isFetching.value = true;
-  try {
-    const response = await questionService.getQuestions(topicId);
-    if (response.status && response.data) {
-       res.value = response.data.map(q => ({
-         ...q,
-       }));
-    }
-  } catch (error) {
-    console.error("Failed to fetch questions:", error);
-  } finally {
-    isFetching.value = false;
-  }
-};
-
-/* ====================================================
-   STATE JAWABAN
-==================================================== */
-const selected = reactive({})
-
-function selectAnswer(questionNumber, answerIndex) {
-  selected[questionNumber] = answerIndex
-}
-
-/* ====================================================
-   WAKTU TIMER
-==================================================== */
-const timePassed = ref(0)
-
-onMounted(() => {
-  fetchQuestions();
-  setInterval(() => {
-    timePassed.value++
-  }, 1000)
-})
+/* ================= TIMER ================= */
+const seconds = ref(0);
+let timerInterval = null;
 
 const formattedTime = computed(() => {
-  const m = Math.floor(timePassed.value / 60).toString().padStart(2, "0")
-  const s = (timePassed.value % 60).toString().padStart(2, "0")
-  return `${m}:${s}`
-})
+  const h = Math.floor(seconds.value / 3600);
+  const m = Math.floor((seconds.value % 3600) / 60);
+  const s = seconds.value % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+});
 
-/* ====================================================
-   SUBMIT BUTTON
-==================================================== */
-const isLoading = ref(false);
-const router = useRouter();
+/* ================= RENDER PDF ================= */
+const pageWrappers = ref([]);
 
-const submit = async () => {
-  if (isLoading.value) return;
-  
-  const questionId = route.params.question_id;
-  if (!questionId) {
-      alert("Missing question session ID");
-      return;
-  }
 
-  // Format answers
-  const formattedAnswers = [];
-  res.value.forEach(q => {
-      const selectedIdx = selected[q.number];
-      if (selectedIdx !== undefined && q.answer[selectedIdx]) {
-          formattedAnswers.push({
-              number: q.number,
-              answer: q.answer[selectedIdx].answer
-          });
-      }
-  });
+async function renderPage(pageNum, canvas) {
+  if (!pdfDoc || renderedPages.has(pageNum) || !canvas) return;
+  renderedPages.add(pageNum);
 
-  isLoading.value = true;
   try {
-      const payload = {
-          uuid: questionId,
-          answer: formattedAnswers
-      };
-      
-      const response = await questionService.submitAnswers(payload);
-      if (response.status) {
-          // Redirect to result page
-           router.push({ 
-             name: 'answer', 
-             params: { 
-               query_result_id: response.data.question_result_id 
-             } 
-           });
-      } else {
-           alert(response.message || "Gagal mengumpulkan jawaban");
-      }
-  } catch (error) {
-      console.error(error);
-      alert("Terjadi kesalahan saat mengumpulkan jawaban");
-  } finally {
-      isLoading.value = false;
-  }
-};
-</script>
+    const page = await pdfDoc.getPage(pageNum);
+    const viewport = page.getViewport({
+      scale: window.innerWidth < 768 ? 1.5 : 3.0,
+    });
 
-<style>
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+    const ctx = canvas.getContext("2d");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+  } catch (err) {
+    console.error(`Error rendering page ${pageNum}:`, err);
+  }
 }
-</style>
+
+/* ================= ACTION ================= */
+function openSheet() {
+  showSheet.value = true;
+}
+
+function selectAnswer(num, opt) {
+  answers[num] = opt;
+  currentQuestion.value = num;
+}
+
+function submitAnswers() {
+  clearInterval(timerInterval);
+  console.log("Jawaban:", answers);
+  console.log("Waktu:", formattedTime.value);
+  showSheet.value = false;
+}
+
+/* ================= INIT ================= */
+let observer = null;
+
+function setupIntersectionObserver() {
+  if (!pdfContainer.value) return; 
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const pageNum = Number(entry.target.dataset.page);
+          const canvas = entry.target.querySelector("canvas");
+          if (pageNum && canvas) {
+            renderPage(pageNum, canvas);
+            observer.unobserve(entry.target);
+          }
+        }
+      });
+    },
+    {
+      root: pdfContainer.value,
+      rootMargin: "200px",
+      threshold: 0.01, 
+    }
+  );
+
+  // Observe all page wrappers
+  if (pageWrappers.value) {
+    pageWrappers.value.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+  }
+}
+
+onMounted(async () => {
+  timerInterval = setInterval(() => {
+    seconds.value++;
+  }, 1000);
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.mjs",
+    import.meta.url
+  ).toString();
+
+  try {
+    pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+    totalPages.value = pdfDoc.numPages;
+
+    // Use nextTick equivalent manually or just wait small macrotask
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    setupIntersectionObserver();
+  } catch (error) {
+    console.error("Error loading PDF:", error);
+  }
+});
+
+onUnmounted(() => {
+  clearInterval(timerInterval);
+  if (observer) {
+    observer.disconnect();
+  }
+});
+</script>
