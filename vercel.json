@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/functions/v1/:match*",
+            "destination": "https://ikmwtjtmcjflrszxaeud.supabase.co/functions/v1/:match*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}

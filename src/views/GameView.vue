@@ -138,7 +138,7 @@ const fetchQuestions = async () => {
             },
             body: JSON.stringify({
                 messages: [{ role: "user", content: prompt }],
-                model: "groq/compound",
+                model: "meta-llama/llama-4-maverick-17b-128e-instruct",
                 temperature: 0.5
             })
         });

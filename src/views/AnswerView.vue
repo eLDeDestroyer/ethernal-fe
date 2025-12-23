@@ -1,130 +1,398 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 pb-24">
+  <div class="min-h-screen bg-gray-100">
     <LoadingOverlay :isLoading="isLoading" />
 
     <!-- HEADER -->
-    <div class="fixed top-0 left-0 right-0 z-30 bg-white shadow-md border-b border-gray-200 px-4 py-3">
-      <h2 class="text-lg font-bold text-gray-800">Hasil Jawaban</h2>
+    <div class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-4 lg:px-6 py-4 flex justify-between items-center">
+      <h2 class="font-bold text-lg truncate mr-2">Latihan Soal</h2>
+
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button
+          v-for="(pdf, i) in pdfList"
+          :key="i"
+          @click="activePdfIndex = i"
+          class="px-3 py-1 rounded-lg text-sm font-bold border"
+          :class="activePdfIndex === i
+            ? 'bg-blue-600 text-white border-blue-600'
+            : 'bg-white'"
+        >
+          {{ pdf.name }}
+        </button>
+      </div>
     </div>
 
-    <div class="h-16"></div>
+    <div class="h-20"></div>
 
-    <!-- LIST RESULT -->
-    <div class="px-4 space-y-5 lg:p-10">
+    <!-- MAIN CONTENT -->
+    <div class="flex flex-col lg:flex-row gap-4 px-4 lg:px-6 h-[calc(100vh-6rem)] lg:h-[85vh]">
 
-      <div
-        v-for="(q, idx) in res"
-        :key="idx"
-        class="p-5 rounded-2xl shadow-md border transition lg:mx-[10rem]"
-        :class="q.is_correct 
-          ? 'bg-blue-50 border-blue-600' 
-          : 'bg-red-50 border-red-600'"
-      >
-
-        <!-- NOMOR -->
-        <p class="text-xs font-semibold lg:text-lg"
-           :class="q.is_correct ? 'text-blue-700' : 'text-red-700'">
-          Soal {{ q.number }}
-        </p>
-
-        <!-- QUESTION -->
-        <p class="text-md text-gray-900 leading-snug mt-1 lg:text-[1.4rem]" v-html="q.question">
-        </p>
-
-        <!-- STATUS -->
-        <p class="text-sm font-bold mt-4"
-           :class="q.is_correct ? 'text-blue-700' : 'text-red-700'">
-          {{ q.is_correct ? 'Jawaban Benar' : 'Jawaban Salah' }}
-        </p>
-
-        <!-- YOUR ANSWER -->
-        <div class="mt-4">
-          <p class="text-md text-gray-700 font-semibold">Jawaban Kamu:</p>
-
+      <!-- PDF VIEWER CONTAINER -->
+      <div class="flex-1 relative bg-gray-300 rounded-xl overflow-hidden h-full">
+        
+        <!-- Render Multiple PDF Viewers (Preloaded) -->
+        <div
+          v-for="(pdf, index) in pdfList"
+          :key="index"
+          v-show="activePdfIndex === index"
+          class="absolute inset-0 overflow-y-auto"
+        >
           <div
-            class="mt-1 px-4 py-3 bg-white rounded-xl border text-sm lg:text-[1.2rem]"
-            :class="q.is_correct ? 'border-blue-400 text-blue-700' : 'border-red-400 text-red-700'"
+            v-for="pageNum in pdfStates[index]?.numPages || 0"
+            :key="pageNum"
+            :data-page="pageNum"
+            :data-pdf-index="index"
+            class="min-h-[500px] flex justify-center items-center bg-gray-400/10 mb-2 page-wrapper"
           >
-            <span class="mr-1">{{ q.answer.your_answer.answer || '-' }}.</span>
-            <span v-html="q.answer.your_answer.answer_text"></span>
-          </div>
-        </div>
-
-        <!-- REAL ANSWER -->
-        <div class="mt-4">
-          <p class="text-md text-gray-700 font-semibold">Jawaban Sebenarnya:</p>
-
-          <div
-            class="bg-white rounded-xl border px-4 py-4 mt-1 "
-            :class="q.is_correct ? 'border-blue-400' : 'border-red-400'"
-          >
-            <div class="text-md text-gray-900 lg:text-[1.2rem]">
-              <span class="mr-1">{{ q.answer.real_answer.answer }}.</span>
-              <span v-html="q.answer.real_answer.answer_text"></span>
-            </div>
-
-            <p class="text-md text-gray-600 mt-2 leading-snug lg:text-[1.2rem]" v-html="q.answer.real_answer.explanation">
-            </p>
+            <canvas class="w-full block shadow-md" />
           </div>
         </div>
 
       </div>
 
-        <!-- ====================== STICKY BOTTOM BUTTON ======================= -->
-    <a href="/dashboard"
-    class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 p-4 lg:p-6"
-    >
-    <button
-        class="w-full lg:w-[400px] mx-auto bg-blue-600 text-white py-3 lg:py-4 rounded-2xl text-center text-sm lg:text-lg font-bold active:scale-95 transition"
-    >
-        KEMBALI
-    </button>
-    </a>
+      <!-- DESKTOP ANSWER PANEL -->
+      <div class="hidden lg:block w-[360px] bg-white rounded-xl shadow p-4 h-full overflow-y-auto">
+        <p class="font-bold text-lg text-center mb-2">Jawaban</p>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center">
+          <p class="text-sm text-gray-600 font-semibold uppercase tracking-wider">Total Skor</p>
+          <p class="text-3xl font-extrabold text-blue-700">
+            {{ result.score }} <span class="text-lg text-gray-500 font-bold">/ {{ result.question }}</span>
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div
+            v-for="num in result.questions.length"
+            :key="num"
+            :class="[
+              'border rounded-xl p-3',
+              result.questions[num - 1]?.is_correct ? 'border-green-500 border-[3px]' : 'border-red-700 border-[3px]'
+            ]"
+          >
+            <div class="flex justify-between mb-2">
+              <span class="font-bold">Soal {{ num }}</span>
+              <span v-if="result.questions[num - 1].your_answer" :class="result.questions[num - 1].is_correct ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">
+                {{ result.questions[num - 1].your_answer }}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-5 gap-2">
+                <button
+                  v-for="opt in options"
+                  :key="opt"
+                  disabled
+                  class="py-2 px-4 rounded-lg font-bold border mr-2 mb-2 transition-colors"
+                  :class="getOptionClass(num - 1, opt)"
+                >
+                  {{ opt }}
+                </button>
+
+            </div>
+          </div>
+        </div>
+
+        <a href="/dashboard" class="block mt-6">
+          <button class="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-md hover:bg-blue-700 transition shadow-lg">
+            KEMBALI KE DASHBOARD
+          </button>
+        </a>
+      </div>
 
     </div>
+
+    <!-- MOBILE BUTTON -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-30 lg:hidden">
+      <button
+        @click="openSheet"
+        class="w-full py-4 rounded-2xl bg-blue-600 text-white font-bold text-sm"
+      >
+        JAWAB & NAVIGASI
+      </button>
+    </div>
+
+    <!-- MOBILE BOTTOM SHEET -->
+    <transition name="fade">
+      <div
+        v-if="showSheet"
+        class="fixed inset-0 bg-black/40 z-40 flex items-end lg:hidden"
+        @click.self="showSheet = false"
+      >
+        <div class="bg-white w-full rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">
+
+          <p class="text-center font-bold text-lg mb-2">
+            Pilih Soal & Jawaban
+          </p>
+
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center">
+            <p class="text-sm text-gray-600 font-semibold uppercase tracking-wider">Total Skor</p>
+            <p class="text-3xl font-extrabold text-blue-700">
+              {{ result.score }} <span class="text-lg text-gray-500 font-bold">/ {{ result.question }}</span>
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <div
+              v-for="num in result.questions.length"
+              :key="num"
+              :class="[
+                'border rounded-xl p-3',
+                result.questions[num - 1]?.is_correct ? 'border-green-500 border-[3px]' : 'border-red-700 border-[3px]'
+              ]"
+            >
+              <div class="flex justify-between mb-2">
+                <span class="font-bold">Soal {{ num }}</span>
+                <span v-if="result.questions[num - 1].your_answer" :class="result.questions[num - 1].is_correct ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">
+                  {{ result.questions[num - 1].your_answer }}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-5 gap-2">
+                <button
+                  v-for="opt in options"
+                  :key="opt"
+                  disabled
+                  class="py-2 px-4 rounded-lg font-bold border mr-2 mb-2 transition-colors"
+                  :class="getOptionClass(num - 1, opt)"
+                >
+                  {{ opt }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <a href="/dashboard" class="block mt-6 mb-safe">
+            <button class="w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition shadow-lg">
+              KEMBALI KE DASHBOARD
+            </button>
+          </a>
+
+        </div>
+      </div>
+    </transition>
 
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted, nextTick, markRaw } from "vue";
 import { useRoute } from "vue-router";
+import * as pdfjsLib from "pdfjs-dist";
 import questionService from "../services/question.service";
 import LoadingOverlay from "../components/LoadingOverlay.vue";
 
 const route = useRoute();
-const res = ref([]);
-const isLoading = ref(false);
 
-const fetchAnswers = async () => {
+/* ================= PDF LIST ================= */
+const pdfList = ref([]);
+const activePdfIndex = ref(0);
+
+// Array of states for each PDF
+const pdfStates = ref([]);
+// { doc: PDFDocumentProxy, numPages: number, renderedPages: Set<number> }
+
+let observer = null;
+
+/* ================= SOAL ================= */
+const currentQuestion = ref(1);
+const showSheet = ref(false);
+const options = ["A", "B", "C", "D", "E"];
+const answers = reactive({});
+
+/* ================= RESULT ================= */
+const result = ref({
+  score: 0,
+  question: 0,
+  questions: [],
+});
+const isLoading = ref(true);
+const errorMsg = ref("");
+
+/* ================= FETCH DATA ================= */
+async function fetchAnswerData() {
   const queryResultId = route.params.query_result_id;
-  if (!queryResultId) return;
+  if (!queryResultId) {
+    errorMsg.value = "Missing query_result_id";
+    isLoading.value = false;
+    return;
+  }
 
-  isLoading.value = true;
   try {
-    const response = await questionService.getAnswers(queryResultId);
-    if (response.status && response.data) {
-      res.value = response.data;
+    const json = await questionService.getAnswers(queryResultId);
+
+    if (json.status) {
+      // 1. Set Result
+      result.value = {
+        score: json.data.score,
+        question: json.data.question,
+        questions: json.data.questions || [],
+      };
+
+      // 2. Set PDF List
+      const pdfs = [];
+      if (json.data.pdf?.pdf_question_path) {
+        pdfs.push({
+          name: "Soal",
+          url: json.data.pdf.pdf_question_path,
+        });
+      }
+      if (json.data.pdf?.pdf_answer_path) {
+        pdfs.push({
+          name: "Pembahasan",
+          url: json.data.pdf.pdf_answer_path,
+        });
+      }
+      pdfList.value = pdfs;
+
+      // Initialize states
+      pdfStates.value = pdfs.map(() => ({
+        doc: null,
+        numPages: 0,
+        renderedPages: new Set(),
+      }));
+
+      // 3. Load ALL PDFs concurrently
+      if (pdfs.length > 0) {
+        await Promise.all(pdfs.map((_, i) => loadPdf(i)));
+      }
+    } else {
+      errorMsg.value = json.message || "Failed to retrieve answer details";
     }
-  } catch (error) {
-    console.error("Failed to fetch answers:", error);
+  } catch (err) {
+    console.error(err);
+    errorMsg.value = "Network error";
   } finally {
     isLoading.value = false;
+    
+    // Setup observer after DOM update
+    nextTick(() => {
+      setupIntersectionObserver();
+    });
   }
-};
+}
 
-onMounted(() => {
-  fetchAnswers();
+function getOptionClass(index, opt) {
+  const q = result.value.questions[index];
+  if (!q) return "bg-white";
+
+  // Jika jawaban BENAR
+  if (q.is_correct) {
+    // Tombol jawaban user (yang juga real answer) -> HIJAU
+    if (opt === q.your_answer) {
+      return "bg-green-500 text-white border-green-500";
+    }
+  } 
+  // Jika jawaban SALAH
+  else {
+    // Tombol jawaban user (salah) -> MERAH
+    if (opt === q.your_answer) {
+      return "bg-red-500 text-white border-red-500";
+    }
+    // Tombol jawaban asli -> HIJAU
+    if (opt === q.real_answer) {
+      return "bg-green-500 text-white border-green-500";
+    }
+  }
+
+  // Sisanya putih
+  return "bg-white";
+}
+
+
+/* ================= PDF RENDER ================= */
+async function renderPage(pdfIndex, pageNum, canvas) {
+  const state = pdfStates.value[pdfIndex];
+  if (!state || !state.doc || state.renderedPages.has(pageNum) || !canvas) return;
+  
+  // Mark as rendering/rendered to prevent duplicate calls
+  state.renderedPages.add(pageNum);
+
+  try {
+    const page = await state.doc.getPage(pageNum);
+    const viewport = page.getViewport({
+      scale: window.innerWidth < 768 ? 1.5 : 3,
+    });
+
+    const ctx = canvas.getContext("2d");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+  } catch(e) {
+    console.error(`Error rendering PDF ${pdfIndex} page ${pageNum}`, e);
+    state.renderedPages.delete(pageNum); // Retry on failure if needed
+  }
+}
+
+function setupIntersectionObserver() {
+    if (observer) observer.disconnect();
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            const pageNum = Number(entry.target.dataset.page);
+            const pdfIndex = Number(entry.target.dataset.pdfIndex);
+            
+            // Validate parsing
+            if (isNaN(pageNum) || isNaN(pdfIndex)) return;
+
+            const canvas = entry.target.querySelector("canvas");
+            renderPage(pdfIndex, pageNum, canvas);
+            
+            // Optionally unobserve if we only need to render once
+            observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      // Observe viewport interaction; we can't effectively scope to one container easily if multiple exist hidden
+      root: null, 
+      rootMargin: "200px",
+      threshold: 0.01,
+    }
+  );
+
+  // Observe all page wrappers across all PDF containers
+  const pages = document.querySelectorAll('.page-wrapper');
+  pages.forEach(el => observer.observe(el));
+}
+
+/* ================= LOAD PDF ================= */
+async function loadPdf(index) {
+  const item = pdfList.value[index];
+  if (!item) return;
+
+  try {
+    const doc = await pdfjsLib.getDocument(item.url).promise;
+    
+    // Update state
+    // markRaw PREVENTS Vue from making this object reactive
+    pdfStates.value[index].doc = markRaw(doc);
+    pdfStates.value[index].numPages = doc.numPages;
+    
+  } catch (e) {
+    console.error(`Error loading PDF index ${index}:`, e);
+  }
+}
+
+function openSheet() {
+  showSheet.value = true;
+}
+
+/* ================= INIT ================= */
+onMounted(async () => {
+    // Set worker globally once
+  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        "pdfjs-dist/build/pdf.worker.min.mjs",
+        import.meta.url
+    ).toString();
+  }
+
+  await fetchAnswerData();
 });
 
-function goBack() {
-  window.history.back()
-}
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
 </script>
-
-<style>
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-</style>

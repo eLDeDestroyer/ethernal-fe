@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/functions/v1': {
-        target: 'https://fcvhrvhnlunssvyegxar.supabase.co',
+        target: 'https://ikmwtjtmcjflrszxaeud.supabase.co',
         changeOrigin: true,
         secure: false,
       },
