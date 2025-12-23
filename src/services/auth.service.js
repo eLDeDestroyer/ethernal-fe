@@ -10,6 +10,9 @@ export default {
     register(userData) {
         return axios.post(`${API_URL}register_function`, userData);
     },
+    refreshToken(token) {
+        return axios.post(`${API_URL}refresh_token_function`, { refresh_token: token });
+    },
     getUser() {
         return api.get('/auth/user');
     },
