@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_SUPABASE_FUNCTIONS_URL || 'https://fcvhrvhnlunssvyegxar.supabase.co/functions/v1/';
+const API_URL = import.meta.env.VITE_SUPABASE_FUNCTIONS_URL || 'https://ikmwtjtmcjflrszxaeud.supabase.co/functions/v1/';
 const API_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export default {

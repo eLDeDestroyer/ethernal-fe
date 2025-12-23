@@ -1,15 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-100">
+    <LoadingOverlay :isLoading="isLoading" />
 
     <!-- HEADER -->
-    <div class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-6 py-4 flex justify-between items-center">
-      <h2 class="font-bold text-lg">Latihan Soal</h2>
+    <div class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-4 lg:px-6 py-4 flex justify-between items-center">
+      <h2 class="font-bold text-lg truncate mr-2">Latihan Soal</h2>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-shrink-0">
         <button
           v-for="(pdf, i) in pdfList"
           :key="i"
-          @click="switchPdf(i)"
+          @click="activePdfIndex = i"
           class="px-3 py-1 rounded-lg text-sm font-bold border"
           :class="activePdfIndex === i
             ? 'bg-blue-600 text-white border-blue-600'
@@ -23,26 +24,33 @@
     <div class="h-20"></div>
 
     <!-- MAIN CONTENT -->
-    <div class="flex flex-col lg:flex-row gap-4 px-4 lg:px-6">
+    <div class="flex flex-col lg:flex-row gap-4 px-4 lg:px-6 h-[calc(100vh-6rem)] lg:h-[85vh]">
 
-      <!-- PDF VIEWER -->
-      <div
-        ref="pdfContainer"
-        class="flex-1 h-[80vh] overflow-y-auto bg-gray-300 rounded-xl"
-      >
+      <!-- PDF VIEWER CONTAINER -->
+      <div class="flex-1 relative bg-gray-300 rounded-xl overflow-hidden h-full">
+        
+        <!-- Render Multiple PDF Viewers (Preloaded) -->
         <div
-          v-for="pageNum in totalPages"
-          :key="pageNum"
-          :data-page="pageNum"
-          ref="pageWrappers"
-          class="min-h-[500px] flex justify-center items-center bg-gray-400/10 mb-2"
+          v-for="(pdf, index) in pdfList"
+          :key="index"
+          v-show="activePdfIndex === index"
+          class="absolute inset-0 overflow-y-auto"
         >
-          <canvas class="w-full block shadow-md" />
+          <div
+            v-for="pageNum in pdfStates[index]?.numPages || 0"
+            :key="pageNum"
+            :data-page="pageNum"
+            :data-pdf-index="index"
+            class="min-h-[500px] flex justify-center items-center bg-gray-400/10 mb-2 page-wrapper"
+          >
+            <canvas class="w-full block shadow-md" />
+          </div>
         </div>
+
       </div>
 
       <!-- DESKTOP ANSWER PANEL -->
-      <div class="hidden lg:block w-[360px] bg-white rounded-xl shadow p-4 h-[80vh] overflow-y-auto">
+      <div class="hidden lg:block w-[360px] bg-white rounded-xl shadow p-4 h-full overflow-y-auto">
         <p class="font-bold text-lg text-center mb-2">Jawaban</p>
         
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center">
@@ -63,7 +71,7 @@
           >
             <div class="flex justify-between mb-2">
               <span class="font-bold">Soal {{ num }}</span>
-              <span v-if="result.questions[num - 1].your_answer" class="text-green-600 font-bold">
+              <span v-if="result.questions[num - 1].your_answer" :class="result.questions[num - 1].is_correct ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">
                 {{ result.questions[num - 1].your_answer }}
               </span>
             </div>
@@ -133,7 +141,7 @@
             >
               <div class="flex justify-between mb-2">
                 <span class="font-bold">Soal {{ num }}</span>
-                <span v-if="result.questions[num - 1].your_answer" class="text-green-600 font-bold">
+                <span v-if="result.questions[num - 1].your_answer" :class="result.questions[num - 1].is_correct ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">
                   {{ result.questions[num - 1].your_answer }}
                 </span>
               </div>
@@ -166,28 +174,22 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted, computed } from "vue";
+import { ref, reactive, onMounted, onUnmounted, nextTick, markRaw } from "vue";
+import { useRoute } from "vue-router";
 import * as pdfjsLib from "pdfjs-dist";
+import questionService from "../services/question.service";
+import LoadingOverlay from "../components/LoadingOverlay.vue";
+
+const route = useRoute();
 
 /* ================= PDF LIST ================= */
-const pdfList = [
-  {
-    name: "Paket 1",
-    url: "https://fcvhrvhnlunssvyegxar.supabase.co/storage/v1/object/sign/ethernal/PBM/PBM3.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODVmYTFjNS1mYTE3LTQ4YjItYjg1Ni04ODMzZjQxN2UyNzAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJldGhlcm5hbC9QQk0vUEJNMy5wZGYiLCJpYXQiOjE3NjYxMTk1MzAsImV4cCI6MTc5NzY1NTUzMH0.nBHnF9jq6B3X1pBb45JPdrM2bAq_Pp0Vw3MaA1fz540",
-  },
-  {
-    name: "Paket 2",
-    url: "https://fcvhrvhnlunssvyegxar.supabase.co/storage/v1/object/sign/ethernal/PBM/PBM3.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iODVmYTFjNS1mYTE3LTQ4YjItYjg1Ni04ODMzZjQxN2UyNzAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJldGhlcm5hbC9QQk0vUEJNMy5wZGYiLCJpYXQiOjE3NjYxMTk1MzAsImV4cCI6MTc5NzY1NTUzMH0.nBHnF9jq6B3X1pBb45JPdrM2bAq_Pp0Vw3MaA1fz540",
-  },
-];
-
+const pdfList = ref([]);
 const activePdfIndex = ref(0);
-const totalPages = ref(0);
-let pdfDoc = null;
 
-const renderedPages = new Set();
-const pdfContainer = ref(null);
-const pageWrappers = ref([]);
+// Array of states for each PDF
+const pdfStates = ref([]);
+// { doc: PDFDocumentProxy, numPages: number, renderedPages: Set<number> }
+
 let observer = null;
 
 /* ================= SOAL ================= */
@@ -196,37 +198,76 @@ const showSheet = ref(false);
 const options = ["A", "B", "C", "D", "E"];
 const answers = reactive({});
 
-/* ================= TIMER ================= */
-const seconds = ref(0);
-let timerInterval = null;
-
-const formattedTime = computed(() => {
-  const h = Math.floor(seconds.value / 3600);
-  const m = Math.floor((seconds.value % 3600) / 60);
-  const s = seconds.value % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-});
-
 /* ================= RESULT ================= */
 const result = ref({
-  score: 9,
-  question: 10,
-  questions: [
-    { your_answer: "B", real_answer: "A", is_correct: false },
-    { your_answer: "A", real_answer: "A", is_correct: true },
-    { your_answer: "C", real_answer: "C", is_correct: true },
-    { your_answer: "D", real_answer: "B", is_correct: false },
-    { your_answer: "E", real_answer: "E", is_correct: true },
-    { your_answer: "A", real_answer: "A", is_correct: true },
-    { your_answer: "B", real_answer: "C", is_correct: false },
-    { your_answer: "C", real_answer: "C", is_correct: true },
-    { your_answer: "D", real_answer: "D", is_correct: true },
-    { your_answer: "A", real_answer: "A", is_correct: true },
-  ],
+  score: 0,
+  question: 0,
+  questions: [],
 });
+const isLoading = ref(true);
+const errorMsg = ref("");
 
-function submitAnswers() {
-  console.log("Submit answers:", answers);
+/* ================= FETCH DATA ================= */
+async function fetchAnswerData() {
+  const queryResultId = route.params.query_result_id;
+  if (!queryResultId) {
+    errorMsg.value = "Missing query_result_id";
+    isLoading.value = false;
+    return;
+  }
+
+  try {
+    const json = await questionService.getAnswers(queryResultId);
+
+    if (json.status) {
+      // 1. Set Result
+      result.value = {
+        score: json.data.score,
+        question: json.data.question,
+        questions: json.data.questions || [],
+      };
+
+      // 2. Set PDF List
+      const pdfs = [];
+      if (json.data.pdf?.pdf_question_path) {
+        pdfs.push({
+          name: "Soal",
+          url: json.data.pdf.pdf_question_path,
+        });
+      }
+      if (json.data.pdf?.pdf_answer_path) {
+        pdfs.push({
+          name: "Pembahasan",
+          url: json.data.pdf.pdf_answer_path,
+        });
+      }
+      pdfList.value = pdfs;
+
+      // Initialize states
+      pdfStates.value = pdfs.map(() => ({
+        doc: null,
+        numPages: 0,
+        renderedPages: new Set(),
+      }));
+
+      // 3. Load ALL PDFs concurrently
+      if (pdfs.length > 0) {
+        await Promise.all(pdfs.map((_, i) => loadPdf(i)));
+      }
+    } else {
+      errorMsg.value = json.message || "Failed to retrieve answer details";
+    }
+  } catch (err) {
+    console.error(err);
+    errorMsg.value = "Network error";
+  } finally {
+    isLoading.value = false;
+    
+    // Setup observer after DOM update
+    nextTick(() => {
+      setupIntersectionObserver();
+    });
+  }
 }
 
 function getOptionClass(index, opt) {
@@ -258,71 +299,80 @@ function getOptionClass(index, opt) {
 
 
 /* ================= PDF RENDER ================= */
-async function renderPage(pageNum, canvas) {
-  if (!pdfDoc || renderedPages.has(pageNum) || !canvas) return;
-  renderedPages.add(pageNum);
+async function renderPage(pdfIndex, pageNum, canvas) {
+  const state = pdfStates.value[pdfIndex];
+  if (!state || !state.doc || state.renderedPages.has(pageNum) || !canvas) return;
+  
+  // Mark as rendering/rendered to prevent duplicate calls
+  state.renderedPages.add(pageNum);
 
-  const page = await pdfDoc.getPage(pageNum);
-  const viewport = page.getViewport({
-    scale: window.innerWidth < 768 ? 1.5 : 3,
-  });
+  try {
+    const page = await state.doc.getPage(pageNum);
+    const viewport = page.getViewport({
+      scale: window.innerWidth < 768 ? 1.5 : 3,
+    });
 
-  const ctx = canvas.getContext("2d");
-  canvas.width = viewport.width;
-  canvas.height = viewport.height;
+    const ctx = canvas.getContext("2d");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
 
-  await page.render({ canvasContext: ctx, viewport }).promise;
+    await page.render({ canvasContext: ctx, viewport }).promise;
+  } catch(e) {
+    console.error(`Error rendering PDF ${pdfIndex} page ${pageNum}`, e);
+    state.renderedPages.delete(pageNum); // Retry on failure if needed
+  }
 }
 
 function setupIntersectionObserver() {
+    if (observer) observer.disconnect();
+
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const pageNum = Number(entry.target.dataset.page);
-          const canvas = entry.target.querySelector("canvas");
-          renderPage(pageNum, canvas);
-          observer.unobserve(entry.target);
+            const pageNum = Number(entry.target.dataset.page);
+            const pdfIndex = Number(entry.target.dataset.pdfIndex);
+            
+            // Validate parsing
+            if (isNaN(pageNum) || isNaN(pdfIndex)) return;
+
+            const canvas = entry.target.querySelector("canvas");
+            renderPage(pdfIndex, pageNum, canvas);
+            
+            // Optionally unobserve if we only need to render once
+            observer.unobserve(entry.target);
         }
       });
     },
     {
-      root: pdfContainer.value,
+      // Observe viewport interaction; we can't effectively scope to one container easily if multiple exist hidden
+      root: null, 
       rootMargin: "200px",
       threshold: 0.01,
     }
   );
 
-  pageWrappers.value.forEach((el) => observer.observe(el));
+  // Observe all page wrappers across all PDF containers
+  const pages = document.querySelectorAll('.page-wrapper');
+  pages.forEach(el => observer.observe(el));
 }
 
 /* ================= LOAD PDF ================= */
-async function loadPdf() {
-  renderedPages.clear();
-  totalPages.value = 0;
+async function loadPdf(index) {
+  const item = pdfList.value[index];
+  if (!item) return;
 
-  if (observer) observer.disconnect();
-
-  pdfDoc = await pdfjsLib
-    .getDocument(pdfList[activePdfIndex.value].url)
-    .promise;
-
-  totalPages.value = pdfDoc.numPages;
-
-  await new Promise((r) => setTimeout(r, 50));
-  setupIntersectionObserver();
-}
-
-/* ================= ACTION ================= */
-function switchPdf(index) {
-  if (index === activePdfIndex.value) return;
-  activePdfIndex.value = index;
-  loadPdf();
-}
-
-function selectAnswer(num, opt) {
-  answers[num] = opt;
-  currentQuestion.value = num;
+  try {
+    const doc = await pdfjsLib.getDocument(item.url).promise;
+    
+    // Update state
+    // markRaw PREVENTS Vue from making this object reactive
+    pdfStates.value[index].doc = markRaw(doc);
+    pdfStates.value[index].numPages = doc.numPages;
+    
+  } catch (e) {
+    console.error(`Error loading PDF index ${index}:`, e);
+  }
 }
 
 function openSheet() {
@@ -331,18 +381,18 @@ function openSheet() {
 
 /* ================= INIT ================= */
 onMounted(async () => {
-  timerInterval = setInterval(() => seconds.value++, 1000);
+    // Set worker globally once
+  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        "pdfjs-dist/build/pdf.worker.min.mjs",
+        import.meta.url
+    ).toString();
+  }
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.mjs",
-    import.meta.url
-  ).toString();
-
-  await loadPdf();
+  await fetchAnswerData();
 });
 
 onUnmounted(() => {
-  clearInterval(timerInterval);
   if (observer) observer.disconnect();
 });
 </script>
