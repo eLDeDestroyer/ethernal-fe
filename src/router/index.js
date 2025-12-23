@@ -6,8 +6,8 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: HomeView
+            component: () => import('../views/DashboardView.vue'),
+            meta: { requiresAuth: true }
         },
         {
             path: '/dashboard',
