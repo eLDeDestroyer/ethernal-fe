@@ -21,7 +21,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -47,7 +47,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -74,7 +74,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -100,7 +100,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -130,7 +130,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -156,7 +156,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -183,7 +183,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -209,7 +209,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -238,7 +238,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -265,7 +265,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -292,7 +292,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -318,7 +318,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -347,7 +347,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -374,7 +374,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -401,7 +401,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -427,7 +427,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
@@ -454,7 +454,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
             ATURAN PENTING:
             1. Pastikan soalnya bervariasi.
             2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-            3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya, dan jawabannya jangan ada yang sama.
+            3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama.
                 
             Format JSON:
             [
