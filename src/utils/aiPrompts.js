@@ -454,7 +454,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
             ATURAN PENTING:
             1. Pastikan soalnya bervariasi.
             2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
-            3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama.
+            3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua), dan jawabannya jangan ada yang sama, buat jawaban agak mirip seperti ada jebakan.
                 
             Format JSON:
             [
