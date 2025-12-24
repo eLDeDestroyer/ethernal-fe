@@ -2,7 +2,7 @@
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 p-4">
 
     <!-- Container -->
-    <div class="w-full max-w-md bg-blue-100 border-4 border-blue-300 rounded-3xl shadow-2xl p-6">
+    <div class="w-full max-w-md bg-white border-4 border-blue-300 rounded-3xl shadow-2xl p-6">
 
       <!-- Header -->
       <div class="text-center mb-6">

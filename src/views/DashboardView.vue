@@ -1,5 +1,5 @@
 <template>
-<div class="min-h-screen relative overflow-hidden p-4 bg-gradient-to-b from-blue-100 to-blue-200 lg:pl-[20rem]">
+<div class="min-h-screen relative overflow-hidden p-4 bg-gradient-to-b from-blue-50 to-blue-100 lg:pl-[20rem]">
     <LoadingOverlay :isLoading="isLoading" />
 
     <!-- BACKGROUND PATTERN HALUS -->
@@ -83,7 +83,7 @@
   <a :href="`/answer/${item.uuid}`"
     v-for="(item, idx) in history"
     :key="idx"
-    class="w-[300px] lg:w-[400px] bg-white rounded-2xl p-4 lg:p-6 shadow-md border border-gray-100 flex-shrink-0"
+    class="w-[300px] lg:w-[400px] bg-white rounded-2xl p-4 lg:p-6 shadow-md border border-gray-200 flex-shrink-0"
   >
     <p class="text-xs lg:text-sm text-blue-600 font-bold">
       {{ item.category_name }}

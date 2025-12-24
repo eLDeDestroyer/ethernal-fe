@@ -22,6 +22,16 @@
             <p class="text-sm font-semibold text-gray-700 truncate max-w-[140px]">{{ userEmail }}</p>
           </div>
         </div>
+
+        <!-- Theme Toggle -->
+        <button 
+          @click="toggleTheme" 
+          class="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          :title="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        >
+          <span v-if="isDarkMode" class="text-xl">☀️</span>
+          <span v-else class="text-xl">🌙</span>
+        </button>
       </div>
     </header>
     <!-- ================= END HEADER ================= -->
@@ -110,7 +120,9 @@ import { ref, onMounted, onUnmounted, computed } from "vue"
 import BottomBar from "../components/BottomBar.vue"
 import profileService from "../services/profile.service"
 import LoadingOverlay from "../components/LoadingOverlay.vue"
+import { useTheme } from "../composables/useTheme"
 
+const { isDarkMode, toggleTheme } = useTheme()
 const isLoading = ref(false)
 
 const res = ref({
