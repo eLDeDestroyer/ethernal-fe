@@ -14,8 +14,7 @@
     <div class="bg-white rounded-3xl p-3 shadow-xl mb-6 border border-gray-200 lg:hidden">
         
         <!-- CARD BIRU -->
-        <div class="relative bg-gradient-to-br from-blue-800 to-blue-900 text-white rounded-3xl p-6 shadow-lg overflow-hidden">
-
+        <div class="relative bg-gradient-to-br from-blue-900 to-blue-800 text-white rounded-3xl p-6 shadow-lg overflow-hidden">
           <!-- HIASAN -->
           <div class="absolute inset-0 opacity-25 pointer-events-none">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/30 rounded-full blur-3xl"></div>
