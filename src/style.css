@@ -1,133 +1,131 @@
 @import "tailwindcss";
 
 @theme {
-    /* BLUE SCALE */
-    --color-blue-50: rgb(239 246 255);
-    --color-blue-100: rgb(219 234 254);
-    --color-blue-200: rgb(191 219 254);
-    --color-blue-300: rgb(147 197 253);
-    --color-blue-400: rgb(96 165 250);
-    --color-blue-500: rgb(59 130 246);
-    --color-blue-600: rgb(37 99 235);
-    --color-blue-700: rgb(29 78 216);
-    --color-blue-800: rgb(30 64 175);
-    --color-blue-900: rgb(30 58 138);
-    --color-blue-950: rgb(23 37 84);
+  /* BLUE SCALE */
+  --color-blue-50: rgb(239 246 255);
+  --color-blue-100: rgb(219 234 254);
+  --color-blue-200: rgb(191 219 254);
+  --color-blue-300: rgb(147 197 253);
+  --color-blue-400: rgb(96 165 250);
+  --color-blue-500: rgb(59 130 246);
+  --color-blue-600: rgb(37 99 235);
+  --color-blue-700: rgb(29 78 216);
+  --color-blue-800: rgb(30 64 175);
+  --color-blue-900: rgb(30 58 138);
+  --color-blue-950: rgb(23 37 84);
 
-    /* GRAY SCALE */
-    --color-gray-50: rgb(249 250 251);
-    --color-gray-100: rgb(243 244 246);
-    --color-gray-200: rgb(229 231 235);
-    --color-gray-300: rgb(209 213 219);
-    --color-gray-400: rgb(156 163 175);
-    --color-gray-500: rgb(107 114 128);
-    --color-gray-600: rgb(75 85 99);
-    --color-gray-700: rgb(55 65 81);
-    --color-gray-800: rgb(31 41 55);
-    --color-gray-900: rgb(17 24 39);
-    --color-gray-950: rgb(3 7 18);
+  /* GRAY SCALE */
+  --color-gray-50: rgb(249 250 251);
+  --color-gray-100: rgb(243 244 246);
+  --color-gray-200: rgb(229 231 235);
+  --color-gray-300: rgb(209 213 219);
+  --color-gray-400: rgb(156 163 175);
+  --color-gray-500: rgb(107 114 128);
+  --color-gray-600: rgb(75 85 99);
+  --color-gray-700: rgb(55 65 81);
+  --color-gray-800: rgb(31 41 55);
+  --color-gray-900: rgb(17 24 39);
+  --color-gray-950: rgb(3 7 18);
 
-    /* RED SCALE */
-    --color-red-50: rgb(254 242 242);
-    --color-red-100: rgb(254 226 226);
-    --color-red-200: rgb(254 202 202);
-    --color-red-300: rgb(252 165 165);
-    --color-red-400: rgb(248 113 113);
-    --color-red-500: rgb(239 68 68);
-    --color-red-600: rgb(220 38 38);
-    --color-red-700: rgb(185 28 28);
-    --color-red-800: rgb(153 27 27);
-    --color-red-900: rgb(127 29 29);
-    --color-red-950: rgb(69 10 10);
+  /* RED SCALE */
+  --color-red-50: rgb(254 242 242);
+  --color-red-100: rgb(254 226 226);
+  --color-red-200: rgb(254 202 202);
+  --color-red-300: rgb(252 165 165);
+  --color-red-400: rgb(248 113 113);
+  --color-red-500: rgb(239 68 68);
+  --color-red-600: rgb(220 38 38);
+  --color-red-700: rgb(185 28 28);
+  --color-red-800: rgb(153 27 27);
+  --color-red-900: rgb(127 29 29);
+  --color-red-950: rgb(69 10 10);
 
-    /* GREEN SCALE */
-    --color-green-50: rgb(240 253 244);
-    --color-green-100: rgb(220 252 231);
-    --color-green-200: rgb(187 247 208);
-    --color-green-300: rgb(134 239 172);
-    --color-green-400: rgb(74 222 128);
-    --color-green-500: rgb(34 197 94);
-    --color-green-600: rgb(22 163 74);
-    --color-green-700: rgb(21 128 61);
-    --color-green-800: rgb(22 101 52);
-    --color-green-900: rgb(20 83 45);
-    --color-green-950: rgb(5 46 22);
+  /* GREEN SCALE */
+  --color-green-50: rgb(240 253 244);
+  --color-green-100: rgb(220 252 231);
+  --color-green-200: rgb(187 247 208);
+  --color-green-300: rgb(134 239 172);
+  --color-green-400: rgb(74 222 128);
+  --color-green-500: rgb(34 197 94);
+  --color-green-600: rgb(22 163 74);
+  --color-green-700: rgb(21 128 61);
+  --color-green-800: rgb(22 101 52);
+  --color-green-900: rgb(20 83 45);
+  --color-green-950: rgb(5 46 22);
 
-    --color-black: rgb(0 0 0);
+  --color-black: rgb(0 0 0);
+  --color-white: rgb(255 255 255);
 }
 
 @layer base {
-    body {
-        background-color: var(--color-blue-50);
-        color: var(--color-gray-900);
-        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 300ms;
-    }
+  body {
+    background-color: var(--color-blue-50);
+    color: var(--color-gray-900);
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
 
-    *,
-    *::before,
-    *::after {
-        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 300ms;
-    }
+  *,
+  *::before,
+  *::after {
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
 }
 
-/* DARK MODE OVERRIDES (Black-Red Theme) */
+/* DARK MODE OVERRIDES (Modern Deep Blue-Slate Theme) */
 :root[data-theme="dark"] {
-    /* BACKGROUNDS (Light Blues) -> DARK GRAYS/BLACKS */
-    --color-blue-50: rgb(15 17 23);
-    /* Darker than card for depth */
-    --color-blue-100: rgb(17 24 39);
-    --color-blue-200: rgb(31 41 55);
-    --color-blue-300: rgb(55 65 81);
+  /* BACKGROUNDS: Menggunakan palet Slate gelap agar senada dengan Biru */
+  --color-blue-50: rgb(10 14 23); /* Background utama (Super Dark) */
+  --color-blue-100: rgb(22 28 45); /* Background Card / Sidebar */
+  --color-blue-200: rgb(30 41 59); /* Hover state pada card */
+  --color-blue-300: rgb(51 65 85); /* Border halus */
 
-    /* ACCENTS (Dark Blues) -> REDS */
-    --color-blue-400: rgb(237 23 64);
-    --color-blue-500: rgb(237 23 64);
-    --color-blue-600: rgb(210 20 60);
-    --color-blue-700: rgb(252 165 165);
-    --color-blue-800: rgb(153 27 27);
-    --color-blue-900: rgb(127 29 29);
-    --color-blue-950: rgb(69 10 10);
+  /* ACCENTS: Tetap Biru tapi lebih 'Glowing' agar kontras di gelap */
+  --color-blue-400: rgb(96 165 250); /* Biru terang untuk icon/label */
+  --color-blue-500: rgb(59 130 246);
+  --color-blue-600: rgb(37 99 235); /* Warna utama tombol/branding */
+  --color-blue-700: rgb(191 219 254); /* Text biru sangat muda */
 
-    /* Invert GRAY SCALE (Light gray bg becomes dark gray bg) */
-    --color-gray-50: rgb(3 7 18);
-    --color-gray-100: rgb(45 50 65);
-    /* Visible dividers */
-    --color-gray-200: rgb(80 85 100);
-    /* High contrast border (Batasannya) */
-    --color-gray-300: rgb(90 95 110);
-    --color-gray-400: rgb(120 125 140);
-    --color-gray-500: rgb(107 114 128);
-    --color-gray-600: rgb(156 163 175);
-    --color-gray-700: rgb(209 213 219);
-    --color-gray-800: rgb(229 231 235);
-    --color-gray-900: rgb(243 244 246);
-    --color-gray-950: rgb(249 250 251);
+  /* RED & GREEN ACCENTS FOR DARK MODE */
+  --color-red-100: rgba(127, 29, 29, 0.4);
+  --color-green-100: rgba(20, 83, 45, 0.4);
 
-    /* Swap WHITE and BLACK */
-    --color-white: rgb(28 32 43);
-    /* #1c202b */
-    /* Backgrounds become black */
-    --color-black: rgb(255 255 255);
-    /* Text becomes white */
+  /* INVERT GRAY SCALE: Untuk Tipografi */
+  --color-gray-50: rgb(15 23 42);
+  --color-gray-100: rgb(30 41 59);
+  --color-gray-200: rgb(51 65 85);
+  --color-gray-300: rgb(71 85 105);
+  --color-gray-400: rgb(148 163 184); /* Text sekunder/deskripsi */
+  --color-gray-500: rgb(107 114 128);
+  --color-gray-600: rgb(156 163 175);
+  --color-gray-700: rgb(203 213 225);
+  --color-gray-800: rgb(226 232 240);
+  --color-gray-900: rgb(248 250 252); /* Text Utama (Putih bersih) */
+  --color-gray-950: rgb(255 255 255);
 
-    /* Subtle Red Glow for depth */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3), 0 0 0 1px rgb(237 23 64 / 0.1);
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3), 0 0 0 1px rgb(237 23 64 / 0.1);
+  /* SWAP WHITE AND BLACK */
+  --color-white: rgb(22 28 45); /* Pengganti background putih di light mode */
+  --color-black: rgb(248 250 252); /* Pengganti text hitam di light mode */
+
+  /* Shadow yang lebih subtle untuk dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
 }
 
 @layer utilities {
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
-        /* Firefox */
-    }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
 }

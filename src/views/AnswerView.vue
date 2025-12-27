@@ -3,18 +3,22 @@
     <LoadingOverlay :isLoading="isLoading" />
 
     <!-- HEADER -->
-    <div class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-4 lg:px-6 py-4 flex justify-between items-center">
+    <div
+      class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-4 lg:px-6 py-4 flex justify-between items-center lg:pl-24 lg:pr-10"
+    >
       <h2 class="font-bold text-lg truncate mr-2">Latihan Soal</h2>
 
-      <div class="flex items-center gap-2 flex-shrink-0">
+      <div class="flex items-center gap-2 shrink-0">
         <button
           v-for="(pdf, i) in pdfList"
           :key="i"
           @click="activePdfIndex = i"
           class="px-3 py-1 rounded-lg text-sm font-bold border"
-          :class="activePdfIndex === i
-            ? 'bg-blue-600 text-white border-blue-600'
-            : 'bg-white'"
+          :class="
+            activePdfIndex === i
+              ? 'bg-blue-600 text-white border-blue-600'
+              : 'bg-white'
+          "
         >
           {{ pdf.name }}
         </button>
@@ -24,11 +28,13 @@
     <div class="h-20"></div>
 
     <!-- MAIN CONTENT -->
-    <div class="flex flex-col lg:flex-row gap-4 px-4 lg:px-6 h-[calc(100vh-6rem)] lg:h-[85vh]">
-
+    <div
+      class="flex flex-col lg:flex-row gap-4 px-4 lg:px-6 h-[calc(100vh-6rem)] lg:h-[85vh]"
+    >
       <!-- PDF VIEWER CONTAINER -->
-      <div class="flex-1 relative bg-gray-300 rounded-xl overflow-hidden h-full">
-        
+      <div
+        class="flex-1 relative bg-gray-300 rounded-xl overflow-hidden h-full"
+      >
         <!-- Render Multiple PDF Viewers (Preloaded) -->
         <div
           v-for="(pdf, index) in pdfList"
@@ -46,17 +52,27 @@
             <canvas class="w-full block shadow-md" />
           </div>
         </div>
-
       </div>
 
       <!-- DESKTOP ANSWER PANEL -->
-      <div class="hidden lg:block w-[360px] bg-white rounded-xl shadow p-4 h-full overflow-y-auto">
+      <div
+        class="hidden lg:block w-[360px] bg-white rounded-xl shadow p-4 h-full overflow-y-auto"
+      >
         <p class="font-bold text-lg text-center mb-2">Jawaban</p>
-        
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center">
-          <p class="text-sm text-gray-600 font-semibold uppercase tracking-wider">Total Skor</p>
+
+        <div
+          class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center"
+        >
+          <p
+            class="text-sm text-gray-600 font-semibold uppercase tracking-wider"
+          >
+            Total Skor
+          </p>
           <p class="text-3xl font-extrabold text-blue-700">
-            {{ result.score }} <span class="text-lg text-gray-500 font-bold">/ {{ result.question }}</span>
+            {{ result.score }}
+            <span class="text-lg text-gray-500 font-bold"
+              >/ {{ result.question }}</span
+            >
           </p>
         </div>
 
@@ -66,42 +82,53 @@
             :key="num"
             :class="[
               'border rounded-xl p-3',
-              result.questions[num - 1]?.is_correct ? 'border-green-500 border-[3px]' : 'border-red-700 border-[3px]'
+              result.questions[num - 1]?.is_correct
+                ? 'border-green-500 border-[3px]'
+                : 'border-red-700 border-[3px]',
             ]"
           >
             <div class="flex justify-between mb-2">
               <span class="font-bold">Soal {{ num }}</span>
-              <span v-if="result.questions[num - 1].your_answer" :class="result.questions[num - 1].is_correct ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">
+              <span
+                v-if="result.questions[num - 1].your_answer"
+                :class="
+                  result.questions[num - 1].is_correct
+                    ? 'text-green-600 font-bold'
+                    : 'text-red-600 font-bold'
+                "
+              >
                 {{ result.questions[num - 1].your_answer }}
               </span>
             </div>
 
             <div class="grid grid-cols-5 gap-2">
-                <button
-                  v-for="opt in options"
-                  :key="opt"
-                  disabled
-                  class="py-2 px-4 rounded-lg font-bold border mr-2 mb-2 transition-colors"
-                  :class="getOptionClass(num - 1, opt)"
-                >
-                  {{ opt }}
-                </button>
-
+              <button
+                v-for="opt in options"
+                :key="opt"
+                disabled
+                class="py-2 px-4 rounded-lg font-bold border mr-2 mb-2 transition-colors"
+                :class="getOptionClass(num - 1, opt)"
+              >
+                {{ opt }}
+              </button>
             </div>
           </div>
         </div>
 
         <a href="/dashboard" class="block mt-6">
-          <button class="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-md hover:bg-blue-700 transition shadow-lg">
+          <button
+            class="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-md hover:bg-blue-700 transition shadow-lg"
+          >
             KEMBALI KE DASHBOARD
           </button>
         </a>
       </div>
-
     </div>
 
     <!-- MOBILE BUTTON -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-30 lg:hidden">
+    <div
+      class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-30 lg:hidden"
+    >
       <button
         @click="openSheet"
         class="w-full py-4 rounded-2xl bg-blue-600 text-white font-bold text-sm"
@@ -117,16 +144,24 @@
         class="fixed inset-0 bg-black/40 z-40 flex items-end lg:hidden"
         @click.self="showSheet = false"
       >
-        <div class="bg-white w-full rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">
+        <div
+          class="bg-white w-full rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto"
+        >
+          <p class="text-center font-bold text-lg mb-2">Pilih Soal & Jawaban</p>
 
-          <p class="text-center font-bold text-lg mb-2">
-            Pilih Soal & Jawaban
-          </p>
-
-          <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center">
-            <p class="text-sm text-gray-600 font-semibold uppercase tracking-wider">Total Skor</p>
+          <div
+            class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-center"
+          >
+            <p
+              class="text-sm text-gray-600 font-semibold uppercase tracking-wider"
+            >
+              Total Skor
+            </p>
             <p class="text-3xl font-extrabold text-blue-700">
-              {{ result.score }} <span class="text-lg text-gray-500 font-bold">/ {{ result.question }}</span>
+              {{ result.score }}
+              <span class="text-lg text-gray-500 font-bold"
+                >/ {{ result.question }}</span
+              >
             </p>
           </div>
 
@@ -136,12 +171,21 @@
               :key="num"
               :class="[
                 'border rounded-xl p-3',
-                result.questions[num - 1]?.is_correct ? 'border-green-500 border-[3px]' : 'border-red-700 border-[3px]'
+                result.questions[num - 1]?.is_correct
+                  ? 'border-green-500 border-[3px]'
+                  : 'border-red-700 border-[3px]',
               ]"
             >
               <div class="flex justify-between mb-2">
                 <span class="font-bold">Soal {{ num }}</span>
-                <span v-if="result.questions[num - 1].your_answer" :class="result.questions[num - 1].is_correct ? 'text-green-600 font-bold' : 'text-red-600 font-bold'">
+                <span
+                  v-if="result.questions[num - 1].your_answer"
+                  :class="
+                    result.questions[num - 1].is_correct
+                      ? 'text-green-600 font-bold'
+                      : 'text-red-600 font-bold'
+                  "
+                >
                   {{ result.questions[num - 1].your_answer }}
                 </span>
               </div>
@@ -161,15 +205,15 @@
           </div>
 
           <a href="/dashboard" class="block mt-6 mb-safe">
-            <button class="w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition shadow-lg">
+            <button
+              class="w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition shadow-lg"
+            >
               KEMBALI KE DASHBOARD
             </button>
           </a>
-
         </div>
       </div>
     </transition>
-
   </div>
 </template>
 
@@ -262,7 +306,7 @@ async function fetchAnswerData() {
     errorMsg.value = "Network error";
   } finally {
     isLoading.value = false;
-    
+
     // Setup observer after DOM update
     nextTick(() => {
       setupIntersectionObserver();
@@ -280,7 +324,7 @@ function getOptionClass(index, opt) {
     if (opt === q.your_answer) {
       return "bg-green-500 text-white border-green-500";
     }
-  } 
+  }
   // Jika jawaban SALAH
   else {
     // Tombol jawaban user (salah) -> MERAH
@@ -297,12 +341,12 @@ function getOptionClass(index, opt) {
   return "bg-white";
 }
 
-
 /* ================= PDF RENDER ================= */
 async function renderPage(pdfIndex, pageNum, canvas) {
   const state = pdfStates.value[pdfIndex];
-  if (!state || !state.doc || state.renderedPages.has(pageNum) || !canvas) return;
-  
+  if (!state || !state.doc || state.renderedPages.has(pageNum) || !canvas)
+    return;
+
   // Mark as rendering/rendered to prevent duplicate calls
   state.renderedPages.add(pageNum);
 
@@ -317,44 +361,44 @@ async function renderPage(pdfIndex, pageNum, canvas) {
     canvas.height = viewport.height;
 
     await page.render({ canvasContext: ctx, viewport }).promise;
-  } catch(e) {
+  } catch (e) {
     console.error(`Error rendering PDF ${pdfIndex} page ${pageNum}`, e);
     state.renderedPages.delete(pageNum); // Retry on failure if needed
   }
 }
 
 function setupIntersectionObserver() {
-    if (observer) observer.disconnect();
+  if (observer) observer.disconnect();
 
   observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            const pageNum = Number(entry.target.dataset.page);
-            const pdfIndex = Number(entry.target.dataset.pdfIndex);
-            
-            // Validate parsing
-            if (isNaN(pageNum) || isNaN(pdfIndex)) return;
+          const pageNum = Number(entry.target.dataset.page);
+          const pdfIndex = Number(entry.target.dataset.pdfIndex);
 
-            const canvas = entry.target.querySelector("canvas");
-            renderPage(pdfIndex, pageNum, canvas);
-            
-            // Optionally unobserve if we only need to render once
-            observer.unobserve(entry.target);
+          // Validate parsing
+          if (isNaN(pageNum) || isNaN(pdfIndex)) return;
+
+          const canvas = entry.target.querySelector("canvas");
+          renderPage(pdfIndex, pageNum, canvas);
+
+          // Optionally unobserve if we only need to render once
+          observer.unobserve(entry.target);
         }
       });
     },
     {
       // Observe viewport interaction; we can't effectively scope to one container easily if multiple exist hidden
-      root: null, 
+      root: null,
       rootMargin: "200px",
       threshold: 0.01,
     }
   );
 
   // Observe all page wrappers across all PDF containers
-  const pages = document.querySelectorAll('.page-wrapper');
-  pages.forEach(el => observer.observe(el));
+  const pages = document.querySelectorAll(".page-wrapper");
+  pages.forEach((el) => observer.observe(el));
 }
 
 /* ================= LOAD PDF ================= */
@@ -364,12 +408,11 @@ async function loadPdf(index) {
 
   try {
     const doc = await pdfjsLib.getDocument(item.url).promise;
-    
+
     // Update state
     // markRaw PREVENTS Vue from making this object reactive
     pdfStates.value[index].doc = markRaw(doc);
     pdfStates.value[index].numPages = doc.numPages;
-    
   } catch (e) {
     console.error(`Error loading PDF index ${index}:`, e);
   }
@@ -381,11 +424,11 @@ function openSheet() {
 
 /* ================= INIT ================= */
 onMounted(async () => {
-    // Set worker globally once
+  // Set worker globally once
   if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-        "pdfjs-dist/build/pdf.worker.min.mjs",
-        import.meta.url
+      "pdfjs-dist/build/pdf.worker.min.mjs",
+      import.meta.url
     ).toString();
   }
 
