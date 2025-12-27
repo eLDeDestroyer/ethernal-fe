@@ -4,7 +4,7 @@
 
     <!-- HEADER -->
     <div
-      class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-6 py-4 flex justify-between items-center"
+      class="fixed top-0 left-0 right-0 z-30 bg-white shadow px-6 py-4 flex justify-between items-center lg:pl-24 lg:pr-10"
     >
       <h2 class="font-bold text-lg">Latihan Soal</h2>
       <span class="font-semibold text-red-600 text-lg">
@@ -59,16 +59,13 @@
             v-for="num in totalQuestions"
             :key="num"
             class="border rounded-xl p-3"
-            :class="currentQuestion === num
-              ? 'border-blue-600'
-              : 'border-gray-200'"
+            :class="
+              currentQuestion === num ? 'border-blue-600' : 'border-gray-200'
+            "
           >
             <div class="flex justify-between mb-2">
               <span class="font-bold">Soal {{ num }}</span>
-              <span
-                v-if="answers[num]"
-                class="text-green-600 font-bold"
-              >
+              <span v-if="answers[num]" class="text-green-600 font-bold">
                 {{ answers[num] }}
               </span>
             </div>
@@ -79,9 +76,11 @@
                 :key="opt"
                 @click="selectAnswer(num, opt)"
                 class="py-2 rounded-lg font-bold border"
-                :class="answers[num] === opt
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white'"
+                :class="
+                  answers[num] === opt
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white'
+                "
               >
                 {{ opt }}
               </button>
@@ -132,10 +131,7 @@
           >
             <div class="flex justify-between mb-2">
               <span class="font-bold">Soal {{ num }}</span>
-              <span
-                v-if="answers[num]"
-                class="text-green-600 font-bold"
-              >
+              <span v-if="answers[num]" class="text-green-600 font-bold">
                 {{ answers[num] }}
               </span>
             </div>
@@ -146,9 +142,11 @@
                 :key="opt"
                 @click="selectAnswer(num, opt)"
                 class="py-2 rounded-lg font-bold border"
-                :class="answers[num] === opt
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white'"
+                :class="
+                  answers[num] === opt
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white'
+                "
               >
                 {{ opt }}
               </button>
@@ -168,7 +166,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted, computed, nextTick, markRaw } from "vue";
+import {
+  ref,
+  reactive,
+  onMounted,
+  onUnmounted,
+  computed,
+  nextTick,
+  markRaw,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as pdfjsLib from "pdfjs-dist";
 import questionService from "../services/question.service";
@@ -208,7 +214,9 @@ const formattedTime = computed(() => {
   const h = Math.floor(seconds.value / 3600);
   const m = Math.floor((seconds.value % 3600) / 60);
   const s = seconds.value % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(
+    s
+  ).padStart(2, "0")}`;
 });
 
 /* ================= FETCH ================= */
