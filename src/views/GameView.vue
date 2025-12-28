@@ -37,6 +37,7 @@
           <option value="statistika">Statistika</option>
           <option value="baris dan deret">Baris dan deret</option>
           <option value="sistem persamaan garis lurus dan linear">Sistem Persamaan Garis Lurus dan Linear</option>
+          <option value="aritmatika sosial">Aritmatika Sosial</option>
           <option value="frasa">Frasa</option>
           <option value="imbuhan">Imbuhan</option>
           <option value="kata baku">Kata Baku</option>
@@ -196,7 +197,7 @@ const score = ref(0);
 const isLoading = ref(false);
 
 const selectedDifficulty = ref("easy");
-const selectedTopic = ref("kuantitatif");
+const selectedTopic = ref("penalaran kuantitatif");
 
 const alertState = ref({
   show: false,
@@ -222,7 +223,7 @@ const fetchQuestions = async () => {
     const prompt = generateQuestionPrompt(
       selectedTopic.value,
       selectedDifficulty.value,
-      20
+      10
     );
 
     const response = await fetch(

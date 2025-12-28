@@ -18,7 +18,7 @@ if (!apiKey) {
     process.exit(1);
 }
 
-const topics = ["statistika", "peluang dan kaidah pencacahan", "baris dan deret", "sistem persamaan garis lurus dan linear"];
+const topics = ["aritmatika sosial"];
 const difficulty = "medium";
 const count = 1;
 

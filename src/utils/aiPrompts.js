@@ -6,9 +6,9 @@
  * @param {number} count - Number of questions to generate.
  * @returns {string} The formatted prompt string.
  */
-export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
+export const generateQuestionPrompt = (topic, difficulty, count = 10) => {
   // Topik yang membutuhkan format matematika (LaTeX)
-  const math = ["bilangan", "kuantitatif", "trigonometri", "geometri", "fungsi kuadrat", "peluang dan kaidah pencacahan", "statistika", "sistem persamaan garis lurus dan linear", "baris dan deret"]
+  const math = ["bilangan", "kuantitatif", "trigonometri", "geometri", "fungsi kuadrat", "peluang dan kaidah pencacahan", "statistika", "sistem persamaan garis lurus dan linear", "baris dan deret", "aritmatika sosial"]
 
   if (math.includes(topic)) {
     if (difficulty == "easy") {
@@ -79,6 +79,34 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
                    Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
+    
+                Format JSON:
+                [
+                  {
+                    "question": "Pertanyaan...",
+                    "answers": [
+                      { "answer": "Opsi 1", "is_correct": false },
+                      { "answer": "Opsi 2", "is_correct": true },
+                      { "answer": "Opsi 3", "is_correct": false }
+                    ]
+                  }
+                ]
+            `;
+      }
+
+      if (topic == "aritmatika sosial") {
+        return `
+                Andaikan anda adalah pembuat soal UTBK SNBT.
+                Buatkan ${count} soal matematika UTBK SNBT tentang aritmatika sosial yang meliputi diskon, pajak, bunga tunggal, bunga majemuk, harga jual, dan harga beli.
+                Tingkat kesulitan: ${difficulty}.
+                
+                ATURAN PENTING:
+                1. Pastikan soalnya bervariasi mencakup semua sub-topik (diskon, pajak, bunga, jual/beli).
+                2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban.
+                4. Gunakan format LaTeX untuk matematika (simbol mata uang, persentase, rumus bunga).
+                5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
+                   Contoh: "Bunga: \\\\( M_0(1+i)^n \\\\)" adalah BENAR.
     
                 Format JSON:
                 [
