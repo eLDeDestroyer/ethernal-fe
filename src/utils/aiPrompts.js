@@ -8,7 +8,7 @@
  */
 export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
   // Topik yang membutuhkan format matematika (LaTeX)
-  const math = ["bilangan", "kuantitatif", "trigonometri", "geometri", "fungsi kuadrat"]
+  const math = ["bilangan", "kuantitatif", "trigonometri", "geometri", "fungsi kuadrat", "peluang dan kaidah pencacahan", "statistika", "sistem persamaan garis lurus dan linear", "baris dan deret"]
 
   if (math.includes(topic)) {
     if (difficulty == "easy") {
@@ -66,10 +66,10 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ]
             `;
       }
-      if (topic == "kuantitatif") {
+      if (topic == "penalaran kuantitatif") {
         return `
                 Andaikan anda adalah pembuat soal UTBK SNBT.
-                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} dengan tingkat kesulitan ${difficulty} dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
+                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} sesuai UTBK dengan tingkat kesulitan ${difficulty} dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
                 
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
@@ -95,7 +95,7 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
       }
       return `
                 Andaikan anda adalah pembuat soal UTBK SNBT.
-                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} dengan kesulitan sulit dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
+                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} sesuai UTBK dengan kesulitan sulit dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
                 
                 ATURAN PENTING:
                 1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya

@@ -29,10 +29,14 @@
           class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 ml-2"
         >
           <option value="bilangan">Bilangan</option>
-          <option value="kuantitatif">Kuantitatif</option>
+          <option value="penalaran kuantitatif">Penalaran Kuantitatif</option>
           <option value="trigonometri">Trigonometri</option>
           <option value="geometri">Geometri</option>
           <option value="fungsi kuadrat">Fungsi kuadrat</option>
+          <option value="peluang dan kaidah pencacahan">Peluang dan Kaidah Pencacahan</option>
+          <option value="statistika">Statistika</option>
+          <option value="baris dan deret">Baris dan deret</option>
+          <option value="sistem persamaan garis lurus dan linear">Sistem Persamaan Garis Lurus dan Linear</option>
           <option value="frasa">Frasa</option>
           <option value="imbuhan">Imbuhan</option>
           <option value="kata baku">Kata Baku</option>
