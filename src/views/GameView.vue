@@ -1,16 +1,33 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 p-4 lg:pl-[25rem] lg:pr-[7rem]">
-    <div class=" p-4 w-full relative mt-[-6rem] lg:border-2 lg:border-blue-300 lg:rounded-lg">
+  <div
+    class="min-h-screen flex items-center lg:items-start justify-center bg-linear-to-b from-blue-50 to-blue-100 p-4 lg:pt-20 lg:px-12"
+  >
+    <div
+      class="p-4 w-full relative lg:border-2 lg:border-blue-300 lg:rounded-lg"
+    >
+      <AlertPopup
+        :show="alertState.show"
+        :type="alertState.type"
+        :title="alertState.title"
+        :message="alertState.message"
+        @close="handleAlertClose"
+      />
       <!-- Dropdowns -->
       <div class="flex justify-between mb-4">
-        <select v-model="selectedDifficulty" class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 mr-2">
+        <select
+          v-model="selectedDifficulty"
+          class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 mr-2"
+        >
           <option value="easy">Mudah</option>
           <option value="medium">Sedang</option>
           <option value="hard">Sulit</option>
           <option value="very hard">Sangat sulit</option>
         </select>
 
-        <select v-model="selectedTopic" class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 ml-2">
+        <select
+          v-model="selectedTopic"
+          class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 ml-2"
+        >
           <option value="bilangan">Bilangan</option>
           <option value="kuantitatif">Kuantitatif</option>
           <option value="trigonometri">Trigonometri</option>
@@ -24,30 +41,59 @@
       </div>
 
       <!-- Screen -->
-      <div class="bg-white rounded-lg border-4 border-blue-400 h-52 lg:h-100 flex flex-col items-center justify-center mb-4 shadow-inner text-center p-2 overflow-auto">
+      <div
+        class="bg-white rounded-lg border-4 border-blue-400 h-52 lg:h-100 flex flex-col items-center justify-center mb-4 shadow-inner text-center p-2 overflow-auto"
+      >
         <!-- Sebelum mulai -->
         <div v-if="!started && !isFinished" class="flex flex-col items-center">
-             <div v-if="isLoading">
-                <p class="text-blue-600 font-semibold">Memuat soal...</p>
-             </div>
-             <p v-else class="text-blue-700 text-lg font-semibold">Ayo mulai bermain!</p>
+          <div v-if="isLoading">
+            <p class="text-blue-600 font-semibold">Memuat soal...</p>
+          </div>
+          <p v-else class="text-blue-700 text-lg font-semibold">
+            Ayo mulai bermain!
+          </p>
         </div>
 
         <!-- Sedang bermain -->
         <div v-else-if="started && !isFinished">
-          <p v-html="renderMath(currentQuestion.question)" class="text-blue-700 text-lg font-semibold mb-2"></p>
+          <p
+            v-html="renderMath(currentQuestion.question)"
+            class="text-blue-700 text-lg font-semibold mb-2"
+          ></p>
         </div>
 
         <!-- Game selesai: tampil satu soal per layar -->
         <div v-else-if="isFinished">
-          <p class="font-bold"><span v-html="renderMath(currentQuestion.question)"></span></p>
-          <p>Status: 
-            <span :class="currentQuestion.userAnswer === currentQuestion.correctAnswer ? 'text-green-600' : 'text-red-600'">
-              {{ currentQuestion.userAnswer === currentQuestion.correctAnswer ? 'Benar' : 'Salah' }}
+          <p class="font-bold">
+            <span v-html="renderMath(currentQuestion.question)"></span>
+          </p>
+          <p>
+            Status:
+            <span
+              :class="
+                currentQuestion.userAnswer === currentQuestion.correctAnswer
+                  ? 'text-green-600'
+                  : 'text-red-600'
+              "
+            >
+              {{
+                currentQuestion.userAnswer === currentQuestion.correctAnswer
+                  ? "Benar"
+                  : "Salah"
+              }}
             </span>
           </p>
-          <p>Jawaban Kamu: <span v-html="renderMath(currentQuestion.userAnswer)"></span></p>
-          <p>Jawaban Benar: <span class="text-blue-700" v-html="renderMath(currentQuestion.correctAnswer)"></span></p>
+          <p>
+            Jawaban Kamu:
+            <span v-html="renderMath(currentQuestion.userAnswer)"></span>
+          </p>
+          <p>
+            Jawaban Benar:
+            <span
+              class="text-blue-700"
+              v-html="renderMath(currentQuestion.correctAnswer)"
+            ></span>
+          </p>
         </div>
       </div>
 
@@ -59,8 +105,19 @@
           :disabled="!isFinished || currentIndex === 0"
           class="bg-blue-500 p-3 rounded-full shadow-md disabled:bg-gray-300 disabled:text-gray-600 transition"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
 
@@ -76,11 +133,22 @@
         <!-- Kanan -->
         <button
           @click="nextQuestion"
-          :disabled="!isFinished || currentIndex === questions.length-1"
+          :disabled="!isFinished || currentIndex === questions.length - 1"
           class="bg-blue-500 p-3 rounded-full shadow-md disabled:bg-gray-300 disabled:text-gray-600 transition"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>
@@ -88,7 +156,7 @@
       <!-- Tombol Jawaban (A/B/C) -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
         <button
-          v-for="(ans, idx) in displayedAnswers" 
+          v-for="(ans, idx) in displayedAnswers"
           :key="idx"
           @click="selectAnswer(ans)"
           :disabled="!started || isFinished"
@@ -103,7 +171,7 @@
         {{ score }} / {{ questions.length }}
       </div>
 
-      <BottomBar/>
+      <BottomBar />
     </div>
   </div>
 </template>
@@ -111,6 +179,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import BottomBar from "../components/BottomBar.vue";
+import AlertPopup from "../components/AlertPopup.vue";
 import { generateQuestionPrompt } from "../utils/aiPrompts";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -125,85 +194,113 @@ const isLoading = ref(false);
 const selectedDifficulty = ref("easy");
 const selectedTopic = ref("kuantitatif");
 
+const alertState = ref({
+  show: false,
+  title: "",
+  message: "",
+  type: "info",
+});
+
+const showAlert = (title, message, type = "info") => {
+  alertState.value = { show: true, title, message, type };
+};
+
+const handleAlertClose = () => {
+  alertState.value.show = false;
+  if (alertState.value.type === "error") {
+    window.location.reload();
+  }
+};
+
 const fetchQuestions = async () => {
-    isLoading.value = true;
-    try {
-        const prompt = generateQuestionPrompt(selectedTopic.value, selectedDifficulty.value, 20);
+  isLoading.value = true;
+  try {
+    const prompt = generateQuestionPrompt(
+      selectedTopic.value,
+      selectedDifficulty.value,
+      20
+    );
 
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                messages: [{ role: "user", content: prompt }],
-                model: "meta-llama/llama-4-maverick-17b-128e-instruct",
-                temperature: 0.5
-            })
-        });
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: prompt }],
+          model: "meta-llama/llama-4-maverick-17b-128e-instruct",
+          temperature: 0.5,
+        }),
+      }
+    );
 
-        if (!response.ok) {
-            throw new Error(`Groq API error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const content = data.choices[0]?.message?.content;
-        
-        // Bersihkan jika ada markdown block
-        let cleanContent = content;
-        if (cleanContent.includes("```json")) {
-            cleanContent = cleanContent.replace(/```json/g, "").replace(/```/g, "");
-        } else if (cleanContent.includes("```")) {
-            cleanContent = cleanContent.replace(/```/g, "");
-        }
-        cleanContent = cleanContent.trim();
-        
-        let parsedQuestions;
-        try {
-            parsedQuestions = JSON.parse(cleanContent);
-        } catch (jsonError) {
-            console.warn("First JSON parse failed, attempting to sanitize LaTeX backslashes...");
-            // Coba perbaiki backslash yang tidak valid untuk JSON
-            // Strategi: Ganti backslash tunggal yang diikuti karakter bukan special char JSON (\", \\, \/, \b, \f, \n, \r, \t) menjadi double backslash.
-            // Regex ini mencari \ yang TIDAK diikuti oleh salah satu karakter escape JSON yang valid.
-            const sanitizedContent = cleanContent.replace(/\\(?!["\\/bfnrt])/g, "\\\\");
-            
-            try {
-                parsedQuestions = JSON.parse(sanitizedContent);
-                console.log("Sanitized JSON parsed successfully.");
-            } catch (secondError) {
-                console.error("JSON Parse Error (Original):", cleanContent);
-                console.error("JSON Parse Error (Sanitized):", sanitizedContent);
-                throw secondError;
-            }
-        }
-        
-        questions.value = parsedQuestions.map(q => ({
-            ...q,
-            userAnswer: null,
-            correctAnswer: q.answers.find(a => a.is_correct)?.answer
-        }));
-
-    } catch (error) {
-        console.error("Error fetching questions:", error);
-        alert("Gagal memuat soal.");
-        window.location.reload();
-    } finally {
-        isLoading.value = false;
+    if (!response.ok) {
+      throw new Error(`Groq API error: ${response.statusText}`);
     }
+
+    const data = await response.json();
+    const content = data.choices[0]?.message?.content;
+
+    // Bersihkan jika ada markdown block
+    let cleanContent = content;
+    if (cleanContent.includes("```json")) {
+      cleanContent = cleanContent.replace(/```json/g, "").replace(/```/g, "");
+    } else if (cleanContent.includes("```")) {
+      cleanContent = cleanContent.replace(/```/g, "");
+    }
+    cleanContent = cleanContent.trim();
+
+    let parsedQuestions;
+    try {
+      parsedQuestions = JSON.parse(cleanContent);
+    } catch (jsonError) {
+      console.warn(
+        "First JSON parse failed, attempting to sanitize LaTeX backslashes..."
+      );
+      // Coba perbaiki backslash yang tidak valid untuk JSON
+      // Strategi: Ganti backslash tunggal yang diikuti karakter bukan special char JSON (\", \\, \/, \b, \f, \n, \r, \t) menjadi double backslash.
+      // Regex ini mencari \ yang TIDAK diikuti oleh salah satu karakter escape JSON yang valid.
+      const sanitizedContent = cleanContent.replace(
+        /\\(?!["\\/bfnrt])/g,
+        "\\\\"
+      );
+
+      try {
+        parsedQuestions = JSON.parse(sanitizedContent);
+        console.log("Sanitized JSON parsed successfully.");
+      } catch (secondError) {
+        console.error("JSON Parse Error (Original):", cleanContent);
+        console.error("JSON Parse Error (Sanitized):", sanitizedContent);
+        throw secondError;
+      }
+    }
+
+    questions.value = parsedQuestions.map((q) => ({
+      ...q,
+      userAnswer: null,
+      correctAnswer: q.answers.find((a) => a.is_correct)?.answer,
+    }));
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    showAlert("Oops!", "Gagal memuat soal.", "error");
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const startGame = async () => {
   if (isLoading.value) return;
-  
+
   await fetchQuestions();
-  
+
   if (questions.value.length > 0) {
-      started.value = true;
-      currentIndex.value = 0;
-      isFinished.value = false;
-      score.value = 0;
+    started.value = true;
+    currentIndex.value = 0;
+    isFinished.value = false;
+    score.value = 0;
   }
 };
 
@@ -214,9 +311,9 @@ const displayedAnswers = computed(() => {
     return currentQuestion.value.answers;
   }
   return [
-    { answer: 'Pilihan A', is_correct: false },
-    { answer: 'Pilihan B', is_correct: false },
-    { answer: 'Pilihan C', is_correct: false },
+    { answer: "Pilihan A", is_correct: false },
+    { answer: "Pilihan B", is_correct: false },
+    { answer: "Pilihan C", is_correct: false },
   ];
 });
 
@@ -235,7 +332,7 @@ const selectAnswer = (ans) => {
 };
 
 const nextQuestion = () => {
-  if (currentIndex.value < questions.value.length-1) currentIndex.value++;
+  if (currentIndex.value < questions.value.length - 1) currentIndex.value++;
 };
 
 const prevQuestion = () => {
@@ -246,7 +343,10 @@ const renderMath = (text) => {
   if (!text) return "";
   return text.replace(/\\\((.*?)\\\)/g, (match, math) => {
     try {
-      return katex.renderToString(math, { throwOnError: false, displayMode: false });
+      return katex.renderToString(math, {
+        throwOnError: false,
+        displayMode: false,
+      });
     } catch (e) {
       return match;
     }
