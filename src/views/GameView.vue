@@ -345,7 +345,35 @@ const prevQuestion = () => {
 
 const renderMath = (text) => {
   if (!text) return "";
-  return text.replace(/\\\((.*?)\\\)/g, (match, math) => {
+  
+  // 1. Render block math first: $$...$$ or \[...\]
+  let rendered = text.replace(/(\$\$|\\\[)([\s\S]*?)(\$\$|\\\])/g, (match, left, math, right) => {
+    try {
+      return katex.renderToString(math, {
+        throwOnError: false,
+        displayMode: true,
+      });
+    } catch (e) {
+      return match;
+    }
+  });
+
+  // 2. Render inline math: \(...\)
+  rendered = rendered.replace(/\\\(([\s\S]*?)\\\)/g, (match, math) => {
+    try {
+      return katex.renderToString(math, {
+        throwOnError: false,
+        displayMode: false,
+      });
+      } catch (e) {
+      return match;
+    }
+  });
+
+  // 3. Render inline math with single $: $...$
+  // Look for $...$ but avoid matches that look like currency (e.g. $5) if possible, 
+  // though generally in this context $ is used for math.
+  rendered = rendered.replace(/\$([^$]+?)\$/g, (match, math) => {
     try {
       return katex.renderToString(math, {
         throwOnError: false,
@@ -355,5 +383,20 @@ const renderMath = (text) => {
       return match;
     }
   });
+
+  // 4. Handle naked LaTeX environments like \begin{cases}...\end{cases}
+  // We wrap them in display mode for rendering
+  rendered = rendered.replace(/(\\begin\{([a-zA-Z]+)\}[\s\S]*?\\end\{\2\})/g, (match, math) => {
+    try {
+      return katex.renderToString(math, {
+        throwOnError: false,
+        displayMode: true,
+      });
+    } catch (e) {
+      return match;
+    }
+  });
+
+  return rendered;
 };
 </script>

@@ -66,6 +66,33 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ]
             `;
       }
+      if (topic == "peluang dan kaidah pencacahan" || topic == "statistika" || topic == "baris dan deret" || topic == "sistem persamaan garis lurus dan linear") {
+        return `
+                Andaikan anda adalah pembuat soal UTBK SNBT.
+                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} sesuai UTBK dengan tingkat kesulitan ${difficulty} dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
+                
+                ATURAN PENTING:
+                1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
+                2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua, kalo bisa buat agar pembagian jawaban abc itu sama rata), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (untuk soal maupun jawaban).
+                5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
+                   Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
+                   Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
+    
+                Format JSON:
+                [
+                  {
+                    "question": "Pertanyaan...",
+                    "answers": [
+                      { "answer": "Opsi 1", "is_correct": false },
+                      { "answer": "Opsi 2", "is_correct": true },
+                      { "answer": "Opsi 3", "is_correct": false }
+                    ]
+                  }
+                ]
+            `;
+      }
       if (topic == "penalaran kuantitatif") {
         return `
                 Andaikan anda adalah pembuat soal UTBK SNBT.
@@ -158,6 +185,33 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
                 3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua, kalo bisa buat agar pembagian jawaban abc itu sama rata), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya).
+                5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
+                   Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
+                   Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
+    
+                Format JSON:
+                [
+                  {
+                    "question": "Pertanyaan...",
+                    "answers": [
+                      { "answer": "Opsi 1", "is_correct": false },
+                      { "answer": "Opsi 2", "is_correct": true },
+                      { "answer": "Opsi 3", "is_correct": false }
+                    ]
+                  }
+                ]
+            `;
+      }
+      if (topic == "peluang dan kaidah pencacahan" || topic == "statistika" || topic == "baris dan deret" || topic == "sistem persamaan garis lurus dan linear") {
+        return `
+                Andaikan anda adalah pembuat soal UTBK SNBT.
+                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} dengan tingkat kesulitan ${difficulty} dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
+                
+                ATURAN PENTING:
+                1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
+                2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua, kalo bisa buat agar pembagian jawaban abc itu sama rata), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (untuk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
                    Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
@@ -284,6 +338,33 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 ]
             `;
       }
+      if (topic == "peluang dan kaidah pencacahan" || topic == "statistika" || topic == "baris dan deret" || topic == "sistem persamaan garis lurus dan linear") {
+        return `
+                Andaikan anda adalah pembuat soal UTBK SNBT.
+                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
+                
+                ATURAN PENTING:
+                1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
+                2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua, kalo bisa buat agar pembagian jawaban abc itu sama rata), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (untuk soal maupun jawaban).
+                5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
+                   Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
+                   Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
+    
+                Format JSON:
+                [
+                  {
+                    "question": "Pertanyaan...",
+                    "answers": [
+                      { "answer": "Opsi 1", "is_correct": false },
+                      { "answer": "Opsi 2", "is_correct": true },
+                      { "answer": "Opsi 3", "is_correct": false }
+                    ]
+                  }
+                ]
+            `;
+      }
       if (topic == "kuantitatif") {
         return `
                 Andaikan anda adalah pembuat soal UTBK SNBT.
@@ -376,6 +457,33 @@ export const generateQuestionPrompt = (topic, difficulty, count = 20) => {
                 2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
                 3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua, kalo bisa buat agar pembagian jawaban abc itu sama rata), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
                 4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (unutk soal maupun jawaban).
+                5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
+                   Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
+                   Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
+    
+                Format JSON:
+                [
+                  {
+                    "question": "Pertanyaan...",
+                    "answers": [
+                      { "answer": "Opsi 1", "is_correct": false },
+                      { "answer": "Opsi 2", "is_correct": true },
+                      { "answer": "Opsi 3", "is_correct": false }
+                    ]
+                  }
+                ]
+            `;
+      }
+      if (topic == "peluang dan kaidah pencacahan" || topic == "statistika" || topic == "baris dan deret" || topic == "sistem persamaan garis lurus dan linear") {
+        return `
+                Andaikan anda adalah pembuat soal UTBK SNBT.
+                Buatkan ${count} soal matematika UTBK SNBT tentang topic ${topic} dengan kesulitan sulit dan jawaban acak (karena tadi saya cek jawaban nya ada di tengah terus).
+                
+                ATURAN PENTING:
+                1. Pastikan soalnya buat acak dan tidak sama dengan soal sebelumnya
+                2. Output HARUS array JSON valid saja. TANPA markdown, TANPA backticks.
+                3. Setiap soal HARUS memiliki tepat 3 pilihan jawaban yang di random abc nya (jangan B semua, jangan A semua, ataupun jangan C semua, kalo bisa buat agar pembagian jawaban abc itu sama rata), dan jawabannya jangan ada yang sama (array 'answers' isi 3 object).
+                4. Gunakan format LaTeX untuk matematika (bukan hanya soal, tapi juga jawabanya) (untuk soal maupun jawaban).
                 5. KRUSIAL: Semua backslash LaTeX HARUS di-scape menjadi double backslash (\\\\). 
                    Contoh: "Rumus: \\\\( x^2 \\\\)" adalah BENAR. "Rumus: \\( x^2 \\)" adalah SALAH (akan error JSON).
                    Pastikan semua simbol LaTeX seperti \\\\frac, \\\\sqrt, dll menggunakan double backslash.
