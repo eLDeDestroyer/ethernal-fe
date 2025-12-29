@@ -13,6 +13,18 @@
         @close="handleAlertClose"
       />
       <!-- Dropdowns -->
+      <select
+          v-model="selectedModelAI"
+          class="bg-white mb-3 border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-full mr-2 block lg:hidden"
+        >
+          <option value="meta-llama/llama-4-maverick-17b-128e-instruct">(AI Model) meta-llama/llama-4-maverick-17b-128e-instruct</option>
+          <option value="meta-llama/llama-4-scout-17b-16e-instruct">(AI Model) meta-llama/llama-4-scout-17b-16e-instruct</option>
+          <option value="openai/gpt-oss-120b">(AI Model) openai/gpt-oss-120b</option>
+          <option value="openai/gpt-oss-20b">(AI Model) openai/gpt-oss-20b</option>
+          <option value="openai/gpt-oss-safeguard-20b">(AI Model) openai/gpt-oss-safeguard-20b</option>
+          <option value="groq/compound">(AI Model) groq/compound</option>
+      </select>
+
       <div class="flex justify-between mb-4">
         <select
           v-model="selectedDifficulty"
@@ -25,11 +37,24 @@
         </select>
 
         <select
+          v-model="selectedModelAI"
+          class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 mr-2 hidden lg:block"
+        >
+          <option value="meta-llama/llama-4-maverick-17b-128e-instruct">(AI Model) meta-llama/llama-4-maverick-17b-128e-instruct</option>
+          <option value="meta-llama/llama-4-scout-17b-16e-instruct">(AI Model) meta-llama/llama-4-scout-17b-16e-instruct</option>
+          <option value="openai/gpt-oss-120b">(AI Model) openai/gpt-oss-120b</option>
+          <option value="openai/gpt-oss-20b">(AI Model) openai/gpt-oss-20b</option>
+          <option value="openai/gpt-oss-safeguard-20b">(AI Model) openai/gpt-oss-safeguard-20b</option>
+          <option value="groq/compound">(AI Model) groq/compound</option>
+        </select>
+
+        <select
           v-model="selectedTopic"
           class="bg-white border-2 border-blue-300 rounded-lg p-2 text-blue-700 font-semibold shadow-inner w-1/2 ml-2"
         >
           <option value="bilangan">Bilangan</option>
-          <option value="penalaran kuantitatif">Penalaran Kuantitatif</option>
+          <option value="pengetahuan kuantitatif">Pengetahuan Kuantitatif</option>
+          <option value="penalaran matematika">Penalaran Matematika</option>
           <option value="trigonometri">Trigonometri</option>
           <option value="geometri">Geometri</option>
           <option value="fungsi kuadrat">Fungsi kuadrat</option>
@@ -38,6 +63,8 @@
           <option value="baris dan deret">Baris dan deret</option>
           <option value="sistem persamaan garis lurus dan linear">Sistem Persamaan Garis Lurus dan Linear</option>
           <option value="aritmatika sosial">Aritmatika Sosial</option>
+          <option value="matriks">Matriks</option>
+          <option value="transformasi geometri">Transformasi Geometri</option>
           <option value="frasa">Frasa</option>
           <option value="imbuhan">Imbuhan</option>
           <option value="kata baku">Kata Baku</option>
@@ -197,7 +224,8 @@ const score = ref(0);
 const isLoading = ref(false);
 
 const selectedDifficulty = ref("easy");
-const selectedTopic = ref("penalaran kuantitatif");
+const selectedModelAI = ref("meta-llama/llama-4-maverick-17b-128e-instruct");
+const selectedTopic = ref("pengetahuan kuantitatif");
 
 const alertState = ref({
   show: false,
