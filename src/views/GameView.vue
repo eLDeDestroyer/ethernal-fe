@@ -3,7 +3,7 @@
     class="min-h-screen flex items-center lg:items-start justify-center bg-linear-to-b from-blue-50 to-blue-100 p-4 lg:pt-20 lg:px-12"
   >
     <div
-      class="p-4 w-full relative lg:border-2 lg:border-blue-300 lg:rounded-lg"
+      class="p-4 w-full relative lg:border-2 lg:border-blue-300 lg:rounded-lg lg:w-[70rem]"
     >
       <AlertPopup
         :show="alertState.show"
@@ -74,10 +74,10 @@
 
       <!-- Screen -->
       <div
-        class="bg-white rounded-lg border-4 border-blue-400 h-52 lg:h-100 flex flex-col items-center justify-center mb-4 shadow-inner text-center p-2 overflow-auto"
+        class="bg-white rounded-lg border-4 border-blue-400 h-52 lg:h-100 flex flex-col mb-4 shadow-inner text-center p-2 overflow-auto"
       >
         <!-- Sebelum mulai -->
-        <div v-if="!started && !isFinished" class="flex flex-col items-center">
+        <div v-if="!started && !isFinished" class="flex flex-col items-center w-full my-auto">
           <div v-if="isLoading">
             <p class="text-blue-600 font-semibold">Memuat soal...</p>
           </div>
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Sedang bermain -->
-        <div v-else-if="started && !isFinished">
+        <div v-else-if="started && !isFinished" class="w-full my-auto">
           <p
             v-html="renderMath(currentQuestion.question)"
             class="text-blue-700 text-lg font-semibold mb-2"
@@ -95,7 +95,7 @@
         </div>
 
         <!-- Game selesai: tampil satu soal per layar -->
-        <div v-else-if="isFinished">
+        <div v-else-if="isFinished" class="w-full my-auto">
           <p class="font-bold">
             <span v-html="renderMath(currentQuestion.question)"></span>
           </p>
@@ -264,7 +264,7 @@ const fetchQuestions = async () => {
         },
         body: JSON.stringify({
           messages: [{ role: "user", content: prompt }],
-          model: "meta-llama/llama-4-maverick-17b-128e-instruct",
+          model: selectedModelAI.value,
           temperature: 0.5,
         }),
       }
